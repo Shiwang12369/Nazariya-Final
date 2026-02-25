@@ -1,6 +1,12 @@
-// src/pages/Product.jsx - Ultra Premium Production-Ready Single Product Page
-import { useState, useMemo, useEffect, useRef, useCallback } from 'react'
-import { useParams, Link } from 'react-router-dom'
+// src/pages/ProductDetails.jsx
+import {
+  useState,
+  useMemo,
+  useEffect,
+  useRef,
+  useCallback,
+} from 'react'
+import { useParams, Link, useNavigate } from 'react-router-dom'
 
 const mockProducts = [
   {
@@ -20,8 +26,8 @@ const mockProducts = [
       fit: 'Tailored',
       material: '80% Silk, 20% Cashmere',
       origin: 'Made in Italy',
-      care: 'Dry clean only'
-    }
+      care: 'Dry clean only',
+    },
   },
   {
     id: '2',
@@ -40,8 +46,8 @@ const mockProducts = [
       fit: 'Slim',
       material: '100% Superfine Wool',
       origin: 'Made in Italy',
-      care: 'Dry clean only'
-    }
+      care: 'Dry clean only',
+    },
   },
   {
     id: '3',
@@ -60,14 +66,14 @@ const mockProducts = [
       fit: 'Regular',
       material: '100% Egyptian Cotton',
       origin: 'Made in Portugal',
-      care: 'Machine wash cold'
-    }
+      care: 'Machine wash cold',
+    },
   },
 ]
 
 const sizes = ['XS', 'S', 'M', 'L', 'XL']
 
-// Custom fade-in scroll hook
+// fade-in scroll hook
 const useScrollFadeIn = () => {
   const ref = useRef(null)
   const [visible, setVisible] = useState(false)
@@ -90,9 +96,10 @@ const useScrollFadeIn = () => {
   return { ref, visible }
 }
 
-// Premium Product Page Component
-const Product = () => {
+const ProductDetails = () => {
   const { id } = useParams()
+  const navigate = useNavigate()
+
   const [activeImageIndex, setActiveImageIndex] = useState(0)
   const [activeSize, setActiveSize] = useState('M')
   const [openAccordion, setOpenAccordion] = useState(null)
@@ -109,7 +116,6 @@ const Product = () => {
     [product.id]
   )
 
-  // Page mount animation
   useEffect(() => {
     setMounted(false)
     const timer = setTimeout(() => setMounted(true), 50)
@@ -121,11 +127,18 @@ const Product = () => {
   }, [])
 
   const toggleAccordion = useCallback((section) => {
-    setOpenAccordion(prev => prev === section ? null : section)
+    setOpenAccordion((prev) => (prev === section ? null : section))
   }, [])
 
-  const incrementQuantity = () => setQuantity(prev => Math.min(prev + 1, 99))
-  const decrementQuantity = () => setQuantity(prev => Math.max(prev - 1, 1))
+  const incrementQuantity = () =>
+    setQuantity((prev) => Math.min(prev + 1, 99))
+  const decrementQuantity = () =>
+    setQuantity((prev) => Math.max(prev - 1, 1))
+
+  const handleAddToCart = () => {
+    // yahan baad me actual cart logic add kar sakte ho
+    navigate('/cart')
+  }
 
   const { ref: infoRef, visible: infoVisible } = useScrollFadeIn()
   const { ref: detailsRef, visible: detailsVisible } = useScrollFadeIn()
@@ -133,13 +146,17 @@ const Product = () => {
 
   return (
     <main className="min-h-screen pt-24 pb-20 bg-[hsl(var(--bg-primary))]">
-      <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 transition-all duration-700 ease-out ${
-        mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
-      }`}>
-        
+      <div
+        className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 transition-all duration-700 ease-out ${
+          mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+        }`}
+      >
         {/* Breadcrumb */}
         <nav className="mb-8 flex items-center gap-2 text-sm text-[hsl(var(--text-secondary))]">
-          <Link to="/shop" className="hover:text-[hsl(var(--text-primary))] transition-colors duration-200">
+          <Link
+            to="/shop"
+            className="hover:text-[hsl(var(--text-primary))] transition-colors duration-200"
+          >
             Shop
           </Link>
           <span className="w-1 h-1 bg-[hsl(var(--border-soft))] rounded-full" />
@@ -150,7 +167,6 @@ const Product = () => {
 
         {/* Main Product Section */}
         <section className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 mb-20">
-          
           {/* Image Gallery */}
           <div className="space-y-6">
             <div className="luxury-card overflow-hidden group">
@@ -176,8 +192,8 @@ const Product = () => {
                     aria-selected={isActive}
                     onClick={() => handleImageChange(index)}
                     className={`luxury-card overflow-hidden aspect-square transition-all duration-300 hover:scale-[1.02] ${
-                      isActive 
-                        ? 'ring-2 ring-[hsl(var(--accent))]/50 shadow-lg scale-[1.03]' 
+                      isActive
+                        ? 'ring-2 ring-[hsl(var(--accent))]/50 shadow-lg scale-[1.03]'
                         : 'hover:ring-1 hover:ring-[hsl(var(--accent))]/20'
                     }`}
                   >
@@ -193,9 +209,14 @@ const Product = () => {
           </div>
 
           {/* Product Info */}
-          <div ref={infoRef} className={`space-y-8 transition-all duration-700 delay-200 ${
-            infoVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-          }`}>
+          <div
+            ref={infoRef}
+            className={`space-y-8 transition-all duration-700 delay-200 ${
+              infoVisible
+                ? 'opacity-100 translate-y-0'
+                : 'opacity-0 translate-y-4'
+            }`}
+          >
             <div className="space-y-4">
               <p className="text-xs uppercase tracking-[0.25em] text-[hsl(var(--text-secondary))]">
                 {product.category}
@@ -224,8 +245,8 @@ const Product = () => {
                 <label className="text-sm font-medium uppercase tracking-[0.18em] text-[hsl(var(--text-secondary))]">
                   Select Size
                 </label>
-                <Link 
-                  to="#" 
+                <Link
+                  to="#"
                   className="text-xs underline underline-offset-4 text-[hsl(var(--text-secondary))] hover:text-[hsl(var(--text-primary))] transition-colors"
                 >
                   Size Guide →
@@ -255,7 +276,8 @@ const Product = () => {
                 })}
               </div>
               <p className="text-xs text-[hsl(var(--text-secondary))]">
-                Model is 6'1" (185cm) and wears size M. Runs true to size.
+                Model is 6&apos;1&quot; (185cm) and wears size M. Runs true to
+                size.
               </p>
             </div>
 
@@ -287,10 +309,19 @@ const Product = () => {
               </div>
 
               <div className="space-y-3">
-                <button className="btn-primary w-full h-14 text-lg font-medium shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
-                  Add to Cart — ${(product.price * quantity).toLocaleString()}
+                {/* Add to Cart button CSS refined */}
+                <button
+                  type="button"
+                  onClick={handleAddToCart}
+                  className="btn-primary w-full h-14 text-base sm:text-lg font-medium tracking-[0.08em] uppercase shadow-[0_18px_40px_rgba(0,0,0,0.12)] hover:shadow-[0_22px_50px_rgba(0,0,0,0.16)] hover:-translate-y-0.5 active:translate-y-0 transition-transform duration-200"
+                >
+                  Add to Cart — $
+                  {(product.price * quantity).toLocaleString()}
                 </button>
-                <button className="w-full h-14 rounded-[var(--radius-lg)] border-2 border-[hsl(var(--border-soft))] text-lg font-medium text-[hsl(var(--text-primary))] transition-all duration-300 hover:border-[hsl(var(--accent))] hover:shadow-lg hover:-translate-y-px">
+                <button
+                  type="button"
+                  className="w-full h-14 rounded-[var(--radius-lg)] border-2 border-[hsl(var(--border-soft))] text-base sm:text-lg font-medium text-[hsl(var(--text-primary))] tracking-[0.08em] uppercase transition-all duration-200 hover:border-[hsl(var(--accent))] hover:shadow-md hover:-translate-y-0.5 active:translate-y-0"
+                >
                   Add to Wishlist
                 </button>
               </div>
@@ -302,34 +333,47 @@ const Product = () => {
                 <p className="text-xs uppercase tracking-[0.2em] text-[hsl(var(--text-secondary))] mb-2">
                   Fit
                 </p>
-                <p className="text-sm font-medium text-[hsl(var(--text-primary))]">{product.details.fit}</p>
+                <p className="text-sm font-medium text-[hsl(var(--text-primary))]">
+                  {product.details.fit}
+                </p>
               </div>
               <div>
                 <p className="text-xs uppercase tracking-[0.2em] text-[hsl(var(--text-secondary))] mb-2">
                   Origin
                 </p>
-                <p className="text-sm font-medium text-[hsl(var(--text-primary))]">{product.details.origin}</p>
+                <p className="text-sm font-medium text-[hsl(var(--text-primary))]">
+                  {product.details.origin}
+                </p>
               </div>
               <div>
                 <p className="text-xs uppercase tracking-[0.2em] text-[hsl(var(--text-secondary))] mb-2">
                   Material
                 </p>
-                <p className="text-sm font-medium text-[hsl(var(--text-primary))]">{product.details.material}</p>
+                <p className="text-sm font-medium text-[hsl(var(--text-primary))]">
+                  {product.details.material}
+                </p>
               </div>
               <div>
                 <p className="text-xs uppercase tracking-[0.2em] text-[hsl(var(--text-secondary))] mb-2">
                   Care
                 </p>
-                <p className="text-sm font-medium text-[hsl(var(--text-primary))]">{product.details.care}</p>
+                <p className="text-sm font-medium text-[hsl(var(--text-primary))]">
+                  {product.details.care}
+                </p>
               </div>
             </div>
           </div>
         </section>
 
         {/* Details Accordion */}
-        <section ref={detailsRef} className={`space-y-3 mb-20 transition-all duration-700 delay-400 ${
-          detailsVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
-        }`}>
+        <section
+          ref={detailsRef}
+          className={`space-y-3 mb-20 transition-all duration-700 delay-400 ${
+            detailsVisible
+              ? 'opacity-100 translate-y-0'
+              : 'opacity-0 translate-y-6'
+          }`}
+        >
           <AccordionItem
             id="description"
             title="Product Description"
@@ -338,24 +382,38 @@ const Product = () => {
           >
             <div className="prose prose-sm max-w-none text-[hsl(var(--text-secondary))]">
               <p className="mb-4">
-                Crafted from the finest materials and designed for timeless elegance, this piece exemplifies our commitment to quality and sophistication. 
-                Every detail has been meticulously considered, from the hand-stitched seams to the perfectly balanced proportions.
+                Crafted from the finest materials and designed for timeless
+                elegance, this piece exemplifies our commitment to quality and
+                sophistication. Every detail has been meticulously considered,
+                from the hand-stitched seams to the perfectly balanced
+                proportions.
               </p>
               <p>
-                Pair with tailored trousers for formal occasions or relaxed denim for a refined casual look. This garment transcends seasons and trends, 
-                becoming a cornerstone of any discerning wardrobe.
+                Pair with tailored trousers for formal occasions or relaxed
+                denim for a refined casual look. This garment transcends
+                seasons and trends, becoming a cornerstone of any discerning
+                wardrobe.
               </p>
             </div>
           </AccordionItem>
 
-          <AccordionItem id="fabric" title="Fabric & Care" open={openAccordion === 'fabric'} onToggle={toggleAccordion}>
+          <AccordionItem
+            id="fabric"
+            title="Fabric & Care"
+            open={openAccordion === 'fabric'}
+            onToggle={toggleAccordion}
+          >
             <div className="space-y-3 text-sm text-[hsl(var(--text-secondary))]">
               <div>
-                <h4 className="font-medium text-[hsl(var(--text-primary))] mb-2">Composition</h4>
+                <h4 className="font-medium text-[hsl(var(--text-primary))] mb-2">
+                  Composition
+                </h4>
                 <p>{product.details.material}</p>
               </div>
               <div>
-                <h4 className="font-medium text-[hsl(var(--text-primary))] mb-2">Care Instructions</h4>
+                <h4 className="font-medium text-[hsl(var(--text-primary))] mb-2">
+                  Care Instructions
+                </h4>
                 <ul className="space-y-1 list-disc list-inside">
                   <li>Dry clean only using perchloroethylene</li>
                   <li>Store on padded hanger away from direct sunlight</li>
@@ -366,18 +424,27 @@ const Product = () => {
             </div>
           </AccordionItem>
 
-          <AccordionItem id="shipping" title="Shipping & Returns" open={openAccordion === 'shipping'} onToggle={toggleAccordion}>
+          <AccordionItem
+            id="shipping"
+            title="Shipping & Returns"
+            open={openAccordion === 'shipping'}
+            onToggle={toggleAccordion}
+          >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-[hsl(var(--text-secondary))]">
               <div>
-                <h4 className="font-medium text-[hsl(var(--text-primary))] mb-3">Delivery</h4>
+                <h4 className="font-medium text-[hsl(var(--text-primary))] mb-3">
+                  Delivery
+                </h4>
                 <ul className="space-y-2">
-                  <li>Complimentary standard shipping (3-5 days)</li>
-                  <li>Express delivery available (+$25, 1-2 days)</li>
+                  <li>Complimentary standard shipping (3–5 days)</li>
+                  <li>Express delivery available (+$25, 1–2 days)</li>
                   <li>Free returns within 30 days</li>
                 </ul>
               </div>
               <div>
-                <h4 className="font-medium text-[hsl(var(--text-primary))] mb-3">Returns</h4>
+                <h4 className="font-medium text-[hsl(var(--text-primary))] mb-3">
+                  Returns
+                </h4>
                 <ul className="space-y-2">
                   <li>30-day return policy</li>
                   <li>Must be unworn with tags attached</li>
@@ -389,9 +456,14 @@ const Product = () => {
         </section>
 
         {/* Related Products */}
-        <section ref={relatedRef} className={`space-y-8 transition-all duration-700 delay-600 ${
-          relatedVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
-        }`}>
+        <section
+          ref={relatedRef}
+          className={`space-y-8 transition-all duration-700 delay-600 ${
+            relatedVisible
+              ? 'opacity-100 translate-y-0'
+              : 'opacity-0 translate-y-6'
+          }`}
+        >
           <h2 className="text-2xl md:text-3xl font-light text-[hsl(var(--text-primary))]">
             You May Also Like
           </h2>
@@ -447,20 +519,28 @@ const AccordionItem = ({ id, title, open, onToggle, children }) => {
         onClick={() => onToggle(id)}
         className="w-full flex items-center justify-between px-6 py-5 hover:bg-[hsl(var(--bg-secondary))] transition-colors duration-200"
       >
-        <span className="text-base font-medium text-[hsl(var(--text-primary))]">{title}</span>
-        <span className={`transition-transform duration-300 ease-out w-6 h-6 flex items-center justify-center rounded-full border-2 border-[hsl(var(--border-soft))] text-sm font-medium ${
-          open ? 'bg-[hsl(var(--accent))] text-[hsl(var(--bg-primary))]' : 'text-[hsl(var(--text-secondary))]'
-        }`}>
+        <span className="text-base font-medium text-[hsl(var(--text-primary))]">
+          {title}
+        </span>
+        <span
+          className={`transition-transform duration-300 ease-out w-6 h-6 flex items-center justify-center rounded-full border-2 border-[hsl(var(--border-soft))] text-sm font-medium ${
+            open
+              ? 'bg-[hsl(var(--accent))] text-[hsl(var(--bg-primary))]'
+              : 'text-[hsl(var(--text-secondary))]'
+          }`}
+        >
           {open ? '−' : '+'}
         </span>
       </button>
-      <div className={`overflow-hidden transition-all duration-500 ease-out ${
-        open ? 'max-h-96 py-4 px-6' : 'max-h-0 py-0 px-0'
-      }`}>
+      <div
+        className={`overflow-hidden transition-all duration-500 ease-out ${
+          open ? 'max-h-96 py-4 px-6' : 'max-h-0 py-0 px-0'
+        }`}
+      >
         <div className="pt-2">{children}</div>
       </div>
     </div>
   )
 }
 
-export default Product
+export default ProductDetails

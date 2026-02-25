@@ -1,6 +1,7 @@
 // src/pages/Cart.jsx
 import { useMemo, useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+// const { cart, increaseQuantity, decreaseQuantity, removeFromCart, subtotal } = useCart();
 
 const initialCart = [
   {
@@ -161,12 +162,12 @@ const Cart = () => {
                         <span className="text-xs uppercase tracking-[0.18em] text-[hsl(var(--text-secondary))]">
                           Quantity
                         </span>
-                        <div className="flex items-center border border-[hsl(var(--border-soft))] rounded-[var(--radius-lg)] overflow-hidden">
+                        <div className="flex items-center rounded-full border border-[hsl(var(--border-soft))] bg-[hsl(var(--bg-primary))] shadow-[0_6px_16px_rgba(0,0,0,0.04)] overflow-hidden">
                           <button
                             type="button"
                             onClick={() => handleDecrease(item.id)}
                             disabled={item.quantity === 1}
-                            className={`w-8 h-8 flex items-center justify-center text-sm transition-all duration-200 ${
+                            className={`w-9 h-9 flex items-center justify-center text-sm font-medium transition-all duration-200 ${
                               item.quantity === 1
                                 ? 'opacity-40 cursor-not-allowed'
                                 : 'hover:bg-[hsl(var(--bg-secondary))]'
@@ -174,13 +175,13 @@ const Cart = () => {
                           >
                             −
                           </button>
-                          <span className="w-10 text-center text-sm text-[hsl(var(--text-primary))]">
+                          <span className="min-w-[2.5rem] text-center text-sm text-[hsl(var(--text-primary))]">
                             {item.quantity}
                           </span>
                           <button
                             type="button"
                             onClick={() => handleIncrease(item.id)}
-                            className="w-8 h-8 flex items-center justify-center text-sm hover:bg-[hsl(var(--bg-secondary))] transition-all duration-200"
+                            className="w-9 h-9 flex items-center justify-center text-sm font-medium hover:bg-[hsl(var(--bg-secondary))] transition-all duration-200"
                           >
                             +
                           </button>
@@ -255,16 +256,18 @@ const Cart = () => {
                 </div>
 
                 <p className="text-xs sm:text-sm text-[hsl(var(--text-secondary))]">
-                  Duties & taxes are estimated. Final amounts are confirmed at
-                  checkout.
+                  Duties &amp; taxes are estimated. Final amounts are confirmed
+                  at checkout.
                 </p>
 
                 <button
                   type="button"
                   onClick={handleCheckout}
                   disabled={!cartItems.length}
-                  className={`btn-primary w-full h-12 sm:h-13 text-sm sm:text-base mt-2 transition-transform duration-200 ${
-                    cartItems.length ? 'hover:-translate-y-0.5' : 'opacity-60 cursor-not-allowed'
+                  className={`w-full h-12 sm:h-13 mt-3 rounded-full text-xs sm:text-sm tracking-[0.22em] uppercase bg-[hsl(var(--text-primary))] text-[hsl(var(--bg-primary))] shadow-[0_16px_40px_rgba(0,0,0,0.18)] transition-all duration-200 ${
+                    cartItems.length
+                      ? 'hover:-translate-y-0.5 hover:shadow-[0_20px_50px_rgba(0,0,0,0.22)]'
+                      : 'opacity-50 cursor-not-allowed'
                   }`}
                 >
                   Proceed to checkout
@@ -272,7 +275,7 @@ const Cart = () => {
 
                 <Link
                   to="/shop"
-                  className="block text-center text-xs sm:text-sm text-[hsl(var(--text-secondary))] hover:text-[hsl(var(--text-primary))] mt-2 transition-colors duration-200"
+                  className="block text-center text-xs sm:text-sm text-[hsl(var(--text-secondary))] hover:text-[hsl(var(--text-primary))] mt-3 tracking-[0.18em] uppercase transition-colors duration-200"
                 >
                   Continue shopping
                 </Link>
